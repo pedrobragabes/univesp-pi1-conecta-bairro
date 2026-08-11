@@ -1,6 +1,19 @@
 # Conecta Bairro — Projeto Integrador em Computação I
 
-Projeto acadêmico desenvolvido para a disciplina **PJI110 — Projeto Integrador em Computação I**, do Eixo de Computação da UNIVESP.
+[![CI](https://github.com/pedrobragabes/univesp-pi1-conecta-bairro/actions/workflows/ci.yml/badge.svg)](https://github.com/pedrobragabes/univesp-pi1-conecta-bairro/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/pedrobragabes/univesp-pi1-conecta-bairro/actions/workflows/codeql.yml/badge.svg)](https://github.com/pedrobragabes/univesp-pi1-conecta-bairro/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+Projeto acadêmico compatível com **PJI110 — Projeto Integrador em Computação I** e com o núcleo do **Projeto Integrador Extensionista I**, conforme a matriz exibida no Portal/AVA da UNIVESP.
+
+## Estado
+
+| Dimensão | Situação |
+|---|---|
+| fundação técnica | concluída, testada e publicada como `v0.1.0-foundation` |
+| entrega acadêmica | pendente de integrantes, parceiro, pesquisa e validação reais |
+| dados | somente registros fictícios de demonstração |
+| implantação | aplicação local; não preparada para dados pessoais em produção |
 
 O Conecta Bairro é um MVP web para registrar, organizar e acompanhar solicitações comunitárias. A proposta enfrenta um problema recorrente em associações, centros comunitários e pequenos coletivos: demandas recebidas em conversas, mensagens e papéis ficam dispersas, sem histórico único e sem visibilidade de andamento.
 
@@ -31,10 +44,9 @@ O Conecta Bairro é um MVP web para registrar, organizar e acompanhar solicitaç
 
 ## Como executar
 
-Pré-requisitos: Node.js 22.5 ou superior e npm.
+Pré-requisitos: Node.js 22.5 ou superior e npm. Após clonar o repositório e entrar em sua pasta:
 
 ```powershell
-cd "C:\Users\pedro\Documents\Projetos\UNIVESP\Estudos UNIVESP\pi1-conecta-bairro"
 npm install
 npm start
 ```
@@ -93,3 +105,7 @@ Antes da entrega, substitua todos os marcadores `[PREENCHER]` nos relatórios:
 ## Uso de dados e privacidade
 
 O campo de contato é opcional. O MVP é adequado a demonstrações e testes locais, mas ainda não possui autenticação, autorização, consentimento formal nem infraestrutura de produção. Não publique dados pessoais reais antes de implementar esses controles e definir uma política de retenção.
+
+## Governança e licença
+
+As tarefas acadêmicas devem ser registradas em issues e associadas aos milestones do calendário do AVA. Consulte a [política de segurança](SECURITY.md) antes de relatar vulnerabilidades. O código é distribuído sob a [licença MIT](LICENSE); dados e evidências de parceiros continuam sujeitos a autorização própria.
