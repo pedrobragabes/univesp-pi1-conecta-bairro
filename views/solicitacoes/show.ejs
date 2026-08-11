@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+<section class="detail-layout">
+  <div class="detail-main">
+    <% if (created) { %><div class="success-box" role="status">Solicitação registrada com sucesso.</div><% } %>
+    <% if (updated) { %><div class="success-box" role="status">Solicitação atualizada com sucesso.</div><% } %>
+    <a class="back-link" href="/solicitacoes">← Voltar ao mural</a>
+    <div class="detail-heading">
+      <div class="card-top"><span class="category-tag"><%= item.categoria %></span><span class="priority priority-<%= item.prioridade.toLowerCase() %>">Prioridade <%= item.prioridade.toLowerCase() %></span></div>
+      <h1><%= item.titulo %></h1>
+      <p class="detail-location">⌖ <%= item.localizacao %></p>
+    </div>
+    <article class="detail-body"><h2>Descrição</h2><p><%= item.descricao %></p></article>
+    <dl class="detail-meta">
+      <div><dt>Solicitante</dt><dd><%= item.solicitante %></dd></div>
+      <div><dt>Registrada em</dt><dd><%= formatDate(item.created_at) %></dd></div>
+      <div><dt>Última atualização</dt><dd><%= formatDate(item.updated_at) %></dd></div>
+    </dl>
+  </div>
+  <aside class="detail-sidebar">
+    <div class="status-panel"><p class="eyebrow">Situação atual</p><span class="status status-large status-<%= statusClass(item.status) %>"><%= item.status %></span>
+      <form method="post" action="/solicitacoes/<%= item.id %>/status"><label><span>Atualizar andamento</span><select name="status"><% statuses.forEach((status) => { %><option value="<%= status %>" <%= item.status === status ? 'selected' : '' %>><%= status %></option><% }) %></select></label><button class="button button-dark full-button" type="submit">Atualizar status</button></form>
+    </div>
+    <div class="detail-actions"><a href="/solicitacoes/<%= item.id %>/editar">Editar informações</a><form method="post" action="/solicitacoes/<%= item.id %>/excluir" data-confirm="Esta ação excluirá definitivamente a solicitação. Deseja continuar?"><button class="danger-link" type="submit">Excluir solicitação</button></form></div>
+  </aside>
+</section>
+<%- include('../partials/footer') %>
+

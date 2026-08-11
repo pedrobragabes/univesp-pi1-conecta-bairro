@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Conecta Bairro: solicitações comunitárias em um só lugar.">
+  <title><%= title %> | Conecta Bairro</title>
+  <link rel="stylesheet" href="/styles.css?v=1.0.1">
+  <script src="/app.js?v=1.0.1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Conecta Bairro — página inicial">
+        <span class="brand-mark" aria-hidden="true">CB</span>
+        <span><strong>Conecta</strong> Bairro<small>um mural para cuidar do comum</small></span>
+      </a>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+      <nav id="main-nav" class="main-nav" aria-label="Navegação principal">
+        <a href="/" class="<%= path === '/' ? 'active' : '' %>" <%= path === '/' ? 'aria-current="page"' : '' %>>Painel</a>
+        <a href="/solicitacoes" class="<%= path.startsWith('/solicitacoes') ? 'active' : '' %>" <%= path.startsWith('/solicitacoes') ? 'aria-current="page"' : '' %>>Solicitações</a>
+        <a href="/sobre" class="<%= path === '/sobre' ? 'active' : '' %>" <%= path === '/sobre' ? 'aria-current="page"' : '' %>>Sobre</a>
+        <a href="/solicitacoes/nova" class="button button-small">+ Nova solicitação</a>
+      </nav>
+    </div>
+  </header>
+  <main id="conteudo">

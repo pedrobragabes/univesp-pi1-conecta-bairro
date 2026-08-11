@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<section class="page-intro">
+  <div><p class="eyebrow">Mural comunitário</p><h1>Solicitações</h1><p>Consulte o que foi registrado e acompanhe cada etapa.</p></div>
+  <a class="button" href="/solicitacoes/nova">+ Nova solicitação</a>
+</section>
+
+<section class="filters" aria-label="Filtros de solicitações">
+  <form method="get" action="/solicitacoes">
+    <label class="search-field"><span>Buscar</span><input type="search" name="busca" value="<%= filters.busca %>" placeholder="Título, descrição ou local"></label>
+    <label><span>Status</span><select name="status"><option value="">Todos</option><% statuses.forEach((status) => { %><option value="<%= status %>" <%= filters.status === status ? 'selected' : '' %>><%= status %></option><% }) %></select></label>
+    <label><span>Categoria</span><select name="categoria"><option value="">Todas</option><% categories.forEach((category) => { %><option value="<%= category %>" <%= filters.categoria === category ? 'selected' : '' %>><%= category %></option><% }) %></select></label>
+    <button class="button button-dark" type="submit">Filtrar</button>
+    <% if (filters.busca || filters.status || filters.categoria) { %><a class="clear-link" href="/solicitacoes">Limpar</a><% } %>
+  </form>
+</section>
+
+<section class="cards-grid" aria-live="polite">
+  <% if (!items.length) { %><div class="empty-state wide"><h2>Nenhum resultado encontrado</h2><p>Tente remover algum filtro ou registre uma nova solicitação.</p><a class="button" href="/solicitacoes/nova">Criar registro</a></div><% } %>
+  <% items.forEach((item, index) => { %>
+    <article class="request-card reveal" style="--delay:<%= index * 60 %>ms">
+      <div class="card-top"><span class="category-tag"><%= item.categoria %></span><span class="priority priority-<%= item.prioridade.toLowerCase() %>"><%= item.prioridade %></span></div>
+      <h2><a href="/solicitacoes/<%= item.id %>"><%= item.titulo %></a></h2>
+      <p><%= item.descricao.length > 125 ? item.descricao.slice(0, 125) + '…' : item.descricao %></p>
+      <div class="card-meta"><span>⌖ <%= item.localizacao %></span><span><%= formatDate(item.created_at) %></span></div>
+      <div class="card-footer"><span class="status status-<%= statusClass(item.status) %>"><%= item.status %></span><a href="/solicitacoes/<%= item.id %>" aria-label="Abrir <%= item.titulo %>">Abrir →</a></div>
+    </article>
+  <% }) %>
+</section>
+<%- include('../partials/footer') %>
+

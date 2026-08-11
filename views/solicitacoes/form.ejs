@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+<section class="form-layout">
+  <aside class="form-aside">
+    <p class="eyebrow"><%= item.id ? 'Atualização' : 'Novo registro' %></p>
+    <h1><%= title %></h1>
+    <p>Forneça informações objetivas. Isso ajuda a comunidade a entender e priorizar a necessidade.</p>
+    <div class="privacy-note"><strong>Privacidade</strong><p>O contato é opcional. Evite inserir dados pessoais na descrição pública.</p></div>
+  </aside>
+  <div class="form-panel">
+    <% if (errors.length) { %><div class="error-box" role="alert"><strong>Revise os campos:</strong><ul><% errors.forEach((error) => { %><li><%= error %></li><% }) %></ul></div><% } %>
+    <form method="post" action="<%= action %>" class="request-form">
+      <label class="full"><span>Título <b>*</b></span><small>Resuma a necessidade em uma frase.</small><input name="titulo" value="<%= item.titulo || '' %>" minlength="5" maxlength="100" required></label>
+      <label class="full"><span>Descrição <b>*</b></span><small>Explique o problema e seu impacto.</small><textarea name="descricao" minlength="10" maxlength="1000" rows="6" required><%= item.descricao || '' %></textarea></label>
+      <label><span>Categoria <b>*</b></span><select name="categoria" required><option value="">Selecione</option><% categories.forEach((category) => { %><option value="<%= category %>" <%= item.categoria === category ? 'selected' : '' %>><%= category %></option><% }) %></select></label>
+      <label><span>Prioridade <b>*</b></span><select name="prioridade" required><% priorities.forEach((priority) => { %><option value="<%= priority %>" <%= item.prioridade === priority ? 'selected' : '' %>><%= priority %></option><% }) %></select></label>
+      <label class="full"><span>Localização <b>*</b></span><input name="localizacao" value="<%= item.localizacao || '' %>" minlength="3" maxlength="150" placeholder="Ex.: Praça das Flores" required></label>
+      <label><span>Seu nome <b>*</b></span><input name="solicitante" value="<%= item.solicitante || '' %>" minlength="2" maxlength="80" required></label>
+      <label><span>Contato <i>opcional</i></span><input name="contato" value="<%= item.contato || '' %>" maxlength="120" placeholder="E-mail ou telefone"></label>
+      <div class="form-actions full"><a class="text-link" href="<%= item.id ? '/solicitacoes/' + item.id : '/solicitacoes' %>">Cancelar</a><button class="button" type="submit"><%= submitLabel %></button></div>
+    </form>
+  </div>
+</section>
+<%- include('../partials/footer') %>
+
