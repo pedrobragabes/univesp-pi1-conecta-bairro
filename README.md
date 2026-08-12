@@ -47,7 +47,7 @@ O Conecta Bairro é um MVP web para registrar, organizar e acompanhar solicitaç
 Pré-requisitos: Node.js 22.5 ou superior e npm. Após clonar o repositório e entrar em sua pasta:
 
 ```powershell
-npm install
+npm ci
 npm start
 ```
 
