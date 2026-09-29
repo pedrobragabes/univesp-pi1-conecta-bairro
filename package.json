@@ -18,6 +18,6 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
-    "docx-preview": "^0.4.0"
+    "docx-preview": "^0.4.1"
   }
 }
