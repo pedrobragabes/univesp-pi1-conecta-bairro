@@ -35,7 +35,7 @@ Este documento registra requisitos iniciais derivados do problema proposto e da 
 | RNF02 | interface operável por teclado | navegação por Tab e foco visível |
 | RNF03 | páginas com HTML semântico e idioma pt-BR | inspeção do HTML renderizado |
 | RNF04 | consultas parametrizadas | revisão do módulo de banco |
-| RNF05 | dados persistidos após reinício | teste manual com arquivo SQLite |
+| RNF05 | dados persistidos após reinício | teste automatizado com arquivo SQLite fechado e reaberto; ensaio do ambiente real continua pendente |
 | RNF06 | fluxo crítico coberto por testes automatizados | execução de `npm test` |
 | RNF07 | execução local documentada | repetição dos passos do README |
 | RNF08 | dados pessoais não obrigatórios | inspeção do formulário e do esquema |

@@ -27,9 +27,9 @@
   </div>
   <div class="metrics-grid">
     <article class="metric-card metric-total"><span>Total de registros</span><strong><%= indicators.total %></strong><small>solicitações cadastradas</small></article>
-    <article class="metric-card"><span>Abertas</span><strong><%= indicators.abertas %></strong><div class="metric-line"><i style="width:<%= indicators.total ? (indicators.abertas / indicators.total) * 100 : 0 %>%"></i></div></article>
-    <article class="metric-card"><span>Em andamento</span><strong><%= indicators.andamento %></strong><div class="metric-line orange"><i style="width:<%= indicators.total ? (indicators.andamento / indicators.total) * 100 : 0 %>%"></i></div></article>
-    <article class="metric-card"><span>Concluídas</span><strong><%= indicators.concluidas %></strong><div class="metric-line green"><i style="width:<%= indicators.total ? (indicators.concluidas / indicators.total) * 100 : 0 %>%"></i></div></article>
+    <article class="metric-card"><span>Abertas</span><strong><%= indicators.abertas %></strong><progress class="metric-line" value="<%= indicators.abertas %>" max="<%= indicators.total || 1 %>" aria-label="Proporção de solicitações abertas"></progress></article>
+    <article class="metric-card"><span>Em andamento</span><strong><%= indicators.andamento %></strong><progress class="metric-line orange" value="<%= indicators.andamento %>" max="<%= indicators.total || 1 %>" aria-label="Proporção de solicitações em andamento"></progress></article>
+    <article class="metric-card"><span>Concluídas</span><strong><%= indicators.concluidas %></strong><progress class="metric-line green" value="<%= indicators.concluidas %>" max="<%= indicators.total || 1 %>" aria-label="Proporção de solicitações concluídas"></progress></article>
   </div>
 </section>
 
@@ -38,8 +38,8 @@
     <div class="section-heading compact"><div><p class="eyebrow">Movimento recente</p><h2>Últimas solicitações</h2></div><a class="text-link" href="/solicitacoes">Ver todas →</a></div>
     <div class="request-list">
       <% if (!latest.length) { %><div class="empty-state"><h3>Nenhuma solicitação ainda</h3><p>O mural está pronto para receber o primeiro registro.</p></div><% } %>
-      <% latest.forEach((item, index) => { %>
-        <a class="request-row reveal" style="--delay:<%= index * 70 %>ms" href="/solicitacoes/<%= item.id %>">
+      <% latest.forEach((item) => { %>
+        <a class="request-row reveal" href="/solicitacoes/<%= item.id %>">
           <span class="category-icon" aria-hidden="true"><%= item.categoria.slice(0, 2).toUpperCase() %></span>
           <span class="request-main"><strong><%= item.titulo %></strong><small><%= item.localizacao %> · <%= formatDate(item.created_at) %></small></span>
           <span class="status status-<%= statusClass(item.status) %>"><%= item.status %></span>

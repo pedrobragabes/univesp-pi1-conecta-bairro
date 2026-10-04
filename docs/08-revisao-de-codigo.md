@@ -1,4 +1,17 @@
-# Revisão de código - versão 1.0.1
+# Revisão de código - versão 1.0.2
+
+## Incremento verificado em 04/10/2026
+
+- Quatro regressões de backend reproduzidas e corrigidas: cadastro/status sem corpo, JSON malformado/excessivo e ausência de confirmação HTML para exclusão. Entrada inválida recebe 422, 400 ou 413 conforme o caso e não grava; logs de erro não incluem corpo/contato enviado.
+- Exclusão exige página de revisão e envio explícito. GET e Cancelar preservam o registro; o percurso funciona com JavaScript desativado. A confirmação não substitui autorização.
+- Navegação móvel permanece visível sem JavaScript. A versão com botão fecha por Escape e devolve o foco; o atalho inicial focaliza o conteúdo.
+- Indicadores usam progress nativo com rótulos em vez de estilo inline recusado pela CSP. Atrasos inline da animação foram removidos sem relaxar a política.
+- Contraste de textos auxiliares, números da página Sobre e rótulo no painel de status corrigido. Ações pequenas podem quebrar linha em telas estreitas.
+- qs 6.16.0, brace-expansion 2.1.7 e docx-preview 0.4.1: audit completo sem alertas conhecidos nesta execução.
+
+Evidências: 11 testes Node, oito Playwright, 22 análises Axe sem violações nos estados examinados e seis páginas sem overflow em 1440, 390 e 320 px. Persistência de edição/status verificada ao fechar e reabrir um arquivo SQLite temporário separado. Não houve ensaio com usuários, implantação pública ou alteração de dados reais. Os resultados automáticos não certificam conformidade completa de acessibilidade.
+
+Os achados abaixo são histórico da fundação. Os bloqueios de produção continuam abertos.
 
 ## Escopo
 

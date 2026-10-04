@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, dirname, join, resolve } from 'node:path';
 import { createApp } from '../src/app.js';
 import { createDatabase } from '../src/database.js';
 
@@ -42,7 +45,7 @@ test('fluxo CRUD cria, consulta, atualiza e exclui uma solicitação', () => wit
   assert.equal(status.status, 302);
   assert.equal(database.find(id).status, 'Concluída');
 
-  const removed = await fetch(`${baseUrl}/solicitacoes/${id}/excluir`, { method: 'POST', redirect: 'manual' });
+  const removed = await fetch(`${baseUrl}/solicitacoes/${id}/excluir`, { method: 'POST', body: new URLSearchParams({ confirmar: 'sim' }), redirect: 'manual' });
   assert.equal(removed.status, 302);
   assert.equal(database.find(id), undefined);
 }));
@@ -70,3 +73,70 @@ test('respostas incluem cabeçalhos defensivos', () => withServer(async ({ baseU
   assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
   assert.equal(response.headers.get('x-frame-options'), 'DENY');
 }));
+
+const fixture = {
+  titulo: 'Pedido sintético de teste', descricao: 'Descrição sintética para validar o fluxo local.',
+  categoria: 'Limpeza', prioridade: 'Média', localizacao: 'Local de demonstração',
+  solicitante: 'Pessoa Fictícia', contato: '',
+};
+
+test('cadastro sem corpo retorna validação e não grava', () => withServer(async ({ baseUrl, database }) => {
+  const response = await fetch(`${baseUrl}/solicitacoes`, { method: 'POST' });
+  assert.equal(response.status, 422);
+  assert.equal(database.indicators().total, 0);
+}));
+
+test('status sem corpo não provoca erro interno nem alteração', () => withServer(async ({ baseUrl, database }) => {
+  const id = database.create(fixture);
+  const response = await fetch(`${baseUrl}/solicitacoes/${id}/status`, { method: 'POST' });
+  assert.equal(response.status, 422);
+  assert.equal(database.find(id).status, 'Aberta');
+}));
+
+test('JSON malformado ou excessivo retorna 400/413 sem gravação', () => withServer(async ({ baseUrl, database }) => {
+  const malformed = await fetch(`${baseUrl}/solicitacoes`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{' });
+  assert.equal(malformed.status, 400);
+  const large = await fetch(`${baseUrl}/solicitacoes`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ titulo: 'a'.repeat(25000) }) });
+  assert.equal(large.status, 413);
+  assert.equal(database.indicators().total, 0);
+}));
+
+test('exclusão apresenta confirmação HTML e exige intenção explícita', () => withServer(async ({ baseUrl, database }) => {
+  const id = database.create(fixture);
+  const confirmation = await fetch(`${baseUrl}/solicitacoes/${id}/excluir`);
+  assert.equal(confirmation.status, 200);
+  assert.match(await confirmation.text(), /Confirmar exclusão/);
+  assert.equal(database.find(id).titulo, fixture.titulo);
+  const rejected = await fetch(`${baseUrl}/solicitacoes/${id}/excluir`, { method: 'POST', redirect: 'manual' });
+  assert.equal(rejected.status, 422);
+  assert.equal(database.find(id).titulo, fixture.titulo);
+}));
+
+test('confirmação de exclusão inexistente retorna 404', () => withServer(async ({ baseUrl }) => {
+  const response = await fetch(`${baseUrl}/solicitacoes/999/excluir`);
+  assert.equal(response.status, 404);
+}));
+
+test('arquivo SQLite preserva edição e status após fechar e reabrir', () => {
+  const temporaryRoot = resolve(tmpdir());
+  const directory = mkdtempSync(join(temporaryRoot, 'conecta-persist-'));
+  const filename = join(directory, 'fixture.db');
+  let database;
+  try {
+    database = createDatabase({ filename, seed: false });
+    const id = database.create(fixture);
+    database.update(id, { ...fixture, localizacao: 'Local corrigido antes do reinício' });
+    database.updateStatus(id, 'Concluída');
+    database.close(); database = undefined;
+    database = createDatabase({ filename, seed: false });
+    assert.equal(database.find(id).localizacao, 'Local corrigido antes do reinício');
+    assert.equal(database.find(id).status, 'Concluída');
+    assert.equal(database.indicators().total, 1);
+    assert.equal(database.indicators().concluidas, 1);
+  } finally {
+    database?.close();
+    assert.equal(dirname(resolve(directory)), temporaryRoot);
+    assert.ok(basename(directory).startsWith('conecta-persist-'));
+    rmSync(directory, { recursive: true, force: true });
+  }
+});

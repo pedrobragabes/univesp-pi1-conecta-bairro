@@ -20,7 +20,7 @@
     <div class="status-panel"><p class="eyebrow">Situação atual</p><span class="status status-large status-<%= statusClass(item.status) %>"><%= item.status %></span>
       <form method="post" action="/solicitacoes/<%= item.id %>/status"><label><span>Atualizar andamento</span><select name="status"><% statuses.forEach((status) => { %><option value="<%= status %>" <%= item.status === status ? 'selected' : '' %>><%= status %></option><% }) %></select></label><button class="button button-dark full-button" type="submit">Atualizar status</button></form>
     </div>
-    <div class="detail-actions"><a href="/solicitacoes/<%= item.id %>/editar">Editar informações</a><form method="post" action="/solicitacoes/<%= item.id %>/excluir" data-confirm="Esta ação excluirá definitivamente a solicitação. Deseja continuar?"><button class="danger-link" type="submit">Excluir solicitação</button></form></div>
+    <div class="detail-actions"><a href="/solicitacoes/<%= item.id %>/editar">Editar informações</a><a class="danger-link" href="/solicitacoes/<%= item.id %>/excluir">Excluir solicitação</a></div>
   </aside>
 </section>
 <%- include('../partials/footer') %>

@@ -24,7 +24,20 @@ jobs:
         run: npm ci
       - name: Audit production dependencies
         run: npm audit --omit=dev
+      - name: Audit all dependencies
+        run: npm audit
       - name: Check syntax
         run: npm run check
       - name: Run tests
         run: npm test
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser and accessibility tests
+        run: npm run test:e2e
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: conecta-browser-evidence
+          path: test-results/
+          retention-days: 7
