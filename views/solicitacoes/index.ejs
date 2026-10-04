@@ -16,8 +16,8 @@
 
 <section class="cards-grid" aria-live="polite">
   <% if (!items.length) { %><div class="empty-state wide"><h2>Nenhum resultado encontrado</h2><p>Tente remover algum filtro ou registre uma nova solicitação.</p><a class="button" href="/solicitacoes/nova">Criar registro</a></div><% } %>
-  <% items.forEach((item, index) => { %>
-    <article class="request-card reveal" style="--delay:<%= index * 60 %>ms">
+  <% items.forEach((item) => { %>
+    <article class="request-card reveal">
       <div class="card-top"><span class="category-tag"><%= item.categoria %></span><span class="priority priority-<%= item.prioridade.toLowerCase() %>"><%= item.prioridade %></span></div>
       <h2><a href="/solicitacoes/<%= item.id %>"><%= item.titulo %></a></h2>
       <p><%= item.descricao.length > 125 ? item.descricao.slice(0, 125) + '…' : item.descricao %></p>

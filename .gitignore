@@ -4,4 +4,6 @@ data/*.db-*
 coverage/
 .env
 artifacts/rendered/
+playwright-report/
+test-results/
 

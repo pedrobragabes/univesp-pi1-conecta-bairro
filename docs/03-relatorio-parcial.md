@@ -2,7 +2,8 @@
 
 ## Conecta Bairro: sistema web para registro e acompanhamento de solicitações comunitárias
 
-**Disciplina:** PJI110 — Projeto Integrador em Computação I  
+**Disciplina:** PJI110 / PIE I — confirmar oferta e matriz no Portal/AVA
+
 **Integrantes e RAs:** [PREENCHER]  
 **Polo e município:** [PREENCHER]  
 **Orientador(a):** [PREENCHER]  
@@ -55,6 +56,21 @@ A arquitetura emprega Express como framework web, EJS para produzir HTML semânt
 ## 8. Situação do desenvolvimento
 
 Na versão parcial, já foram implementados o esquema do banco, o CRUD, os filtros, a busca, os indicadores, a validação no servidor, o tratamento de páginas inexistentes e a interface responsiva. A suíte automatizada cobre painel vazio, fluxo de criação até exclusão e rejeição de dados inválidos.
+
+### Verificação técnica de 04/10/2026 — versão 1.0.2
+
+| Requisitos relacionados | Evidência executada | Resultado e limite |
+|---|---|---|
+| RF01–RF04, RF06–RF10 | Testes HTTP e fluxo de navegador: cadastro, texto escapado, edição, status, busca/filtros e indicadores | Onze testes Node e oito E2E aprovados no total; dados sintéticos |
+| RF05 | Página HTML de confirmação, Cancelar e envio explícito; rejeição de POST sem confirmação | Exclusão não ocorre no GET ou cancelamento; disponível sem JavaScript. Ainda não existe autorização |
+| RNF01–RNF03 | Seis páginas em 1440, 390 e 320 px; análise Axe, foco do atalho, menu com Escape e navegação sem JavaScript | Vinte e duas análises sem violações nos estados testados, sem overflow; não substitui leitores de tela e participantes |
+| RNF04–RNF06 | SQL parametrizado e fixture SQLite em arquivo fechado/reaberto | Edição e status preservados no arquivo temporário; não é restauração de backup nem ensaio de produção |
+| RNF07 | npm ci, npm run check, npm test, instalação do Chromium, npm run test:e2e e npm audit | Reprodução local e CI; servidor de navegador em loopback com banco separado |
+| Política de conteúdo e dependências | Sem erros CSP nas seis páginas testadas; audit completo | Zero alertas conhecidos nesta execução; sem relaxar a política para estilos inline |
+
+Foram corrigidos corpo ausente e JSON malformado/excessivo, confirmação dependente de JavaScript, navegação móvel sem fallback, estilos de indicadores recusados pela CSP, contraste e foco. Os testes novos de backend e três cenários de navegador falharam antes das correções. Logs e imagens de CI devem ser vinculados ao commit efetivamente usado na entrega.
+
+Não houve levantamento com comunidade, aceites, dados pessoais reais, publicação pública ou envio ao AVA. As issues 3, 5 e 6 continuam abertas para validação/entrega final, confirmação de matriz/equipe/parceiro e levantamento real. O relatório final e seu DOCX existentes não foram regenerados como se essas etapas estivessem concluídas.
 
 Permanecem pendentes a confirmação dos requisitos com uma organização real, as sessões de validação, os ajustes decorrentes e a consolidação dos resultados no relatório final.
 

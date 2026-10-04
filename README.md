@@ -10,7 +10,7 @@ Projeto acadêmico compatível com **PJI110 — Projeto Integrador em Computaç�
 
 | Dimensão | Situação |
 |---|---|
-| fundação técnica | concluída, testada e publicada como `v0.1.0-foundation` |
+| fundação técnica | versão 1.0.2 com 11 testes Node, oito E2E e relatório parcial técnico; release histórica `v0.1.0-foundation` |
 | entrega acadêmica | pendente de integrantes, parceiro, pesquisa e validação reais |
 | dados | somente registros fictícios de demonstração |
 | implantação | aplicação local; não preparada para dados pessoais em produção |
@@ -47,7 +47,7 @@ O Conecta Bairro é um MVP web para registrar, organizar e acompanhar solicitaç
 Pré-requisitos: Node.js 22.5 ou superior e npm. Após clonar o repositório e entrar em sua pasta:
 
 ```powershell
-npm install
+npm ci
 npm start
 ```
 
@@ -63,9 +63,16 @@ npm start
 ```powershell
 npm run check
 npm test
+npx playwright install chromium
+npm run test:e2e
+npm audit
 ```
 
-Os testes usam um banco SQLite em memória e não alteram o banco de demonstração.
+Os testes HTTP e de navegador usam SQLite em memória. Um teste de persistência cria seu próprio arquivo temporário, fecha e reabre o banco para conferir edição e status; remove apenas essa fixture. Nenhum deles altera o banco de demonstração. A instalação de dependências e Chromium exige download; os testes de navegador iniciam e encerram um servidor somente em `127.0.0.1:3485`.
+
+Na validação de 04/10/2026 passaram 11 testes Node, oito E2E e 22 análises Axe nos estados examinados. O fluxo inclui cadastro, edição, status, filtros, confirmação/cancelamento de exclusão e uso sem JavaScript. Seis páginas foram verificadas em desktop, 390 px e 320 px, sem overflow e sem erro de CSP no console. Audit completo sem alertas conhecidos. Esses resultados são técnicos e sintéticos; não substituem participantes reais.
+
+Excluir abre uma página de confirmação HTML. Apenas o envio explícito de “Confirmar exclusão” remove o registro, inclusive sem JavaScript. Esse passo reduz exclusão acidental; autenticação/autorização continuam ausentes.
 
 ## Estrutura
 

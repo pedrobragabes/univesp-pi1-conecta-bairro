@@ -12,6 +12,7 @@ function clean(value) {
 }
 
 function validate(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) body = {};
   const item = {
     titulo: clean(body.titulo),
     descricao: clean(body.descricao),
@@ -67,9 +68,9 @@ export function createApp({ database }) {
   app.set('view engine', 'ejs');
   app.set('views', resolve(projectRoot, 'views'));
   app.use(addSecurityHeaders);
+  app.use(rejectCrossSiteWrites);
   app.use(express.urlencoded({ extended: false, limit: '20kb' }));
   app.use(express.json({ limit: '20kb' }));
-  app.use(rejectCrossSiteWrites);
   app.use(express.static(resolve(projectRoot, 'public'), {
     maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0,
   }));
@@ -127,13 +128,20 @@ export function createApp({ database }) {
   });
 
   app.post('/solicitacoes/:id/status', (req, res, next) => {
-    const status = clean(req.body.status);
+    const status = clean(req.body?.status);
     if (!statuses.includes(status)) return res.status(422).send('Status inválido.');
     if (!database.updateStatus(Number(req.params.id), status)) return next();
     res.redirect(`/solicitacoes/${req.params.id}?atualizada=1`);
   });
 
+  app.get('/solicitacoes/:id/excluir', (req, res, next) => {
+    const item = database.find(Number(req.params.id));
+    if (!item) return next();
+    res.render('solicitacoes/excluir', { title: 'Confirmar exclusão', item });
+  });
+
   app.post('/solicitacoes/:id/excluir', (req, res, next) => {
+    if (req.body?.confirmar !== 'sim') return res.status(422).send('Confirme a exclusão na página da solicitação.');
     if (!database.remove(Number(req.params.id))) return next();
     res.redirect('/solicitacoes?excluida=1');
   });
@@ -144,8 +152,12 @@ export function createApp({ database }) {
 
   app.use((req, res) => res.status(404).render('404', { title: 'Página não encontrada' }));
   app.use((error, req, res, next) => {
-    console.error(error);
     if (res.headersSent) return next(error);
+    if (error.type === 'entity.parse.failed' || error.type === 'entity.too.large') {
+      const status = error.type === 'entity.too.large' ? 413 : 400;
+      return res.status(status).send(status === 413 ? 'O formulário excede o limite de envio.' : 'O corpo da requisição é inválido.');
+    }
+    console.error('Falha interna ao processar a requisição.');
     res.status(500).render('500', { title: 'Erro interno' });
   });
 
